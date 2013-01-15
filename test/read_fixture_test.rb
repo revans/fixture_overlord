@@ -19,7 +19,7 @@ module FixtureOverlord
 
     def test_read_invalid_yaml
       assert_raises FormattingError do
-        ReadFixture.new("./test/fixtures/invalid.yml").read
+        ReadFixture.new("./test/invalid.yml").read
       end
     end
   end
