@@ -4,11 +4,17 @@ require "./lib/fixture_overlord/hashish"
 module FixtureOverlord
   class HashishTest < MiniTest::Unit::TestCase
     def hashish
-      Hashish[name: 'Frank Sinatra', location: 'Vegas']
+      Hashish[name: 'Frank Sinatra', location: 'Vegas', show: true]
     end
 
-    def test_is_hash
-      expected = { name: 'Frank Sinatra', location: 'Vegas' }
+    def test_hash_single
+      hash = Hashish[when: "Today"]
+      expected = {when: "Today"}
+      assert_equal expected, hash
+    end
+
+    def test_hash_with_odd
+      expected = { name: 'Frank Sinatra', location: 'Vegas', show: true }
 
       assert_equal expected, hashish
     end

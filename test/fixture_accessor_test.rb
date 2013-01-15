@@ -2,14 +2,20 @@ require 'minitest/autorun'
 require "./lib/fixture_overlord"
 require 'rails'
 
-# setup a mock model
-class Game < Struct.new(:name, :points, :placement)
-  def self.create!(hash)
-    game = new(*hash)
-    game.id = 1
-    game
+# overried AR with a mock
+module ActiveRecord
+  class Base < OpenStruct
+    def self.create!(hash)
+      obj = new(hash)
+      obj.id = 1
+      obj
+    end
   end
 end
+
+# setup a mock model
+class Game < ActiveRecord::Base; end
+class Account < OpenStruct; end
 
 # redirect Rails.root to my test/fixture location here
 module Rails
@@ -38,10 +44,32 @@ module FixtureOverlord
 
     def test_mock_fixture
       mock = mock(:donkey_kong)
-      # assert_equal "Donkey Kong", mock.name
-      # assert_equal 123, mock.points
-      # assert_equal "1st", mock.placement
-      # assert_equal OpenStruct, mock.class
+      assert_equal "Donkey Kong", mock.name
+      assert_equal 123, mock.points
+      assert_equal "1st", mock.placement
+      assert_equal OpenStruct, mock.class
+    end
+
+    def test_build_model_object
+      game = build(:donkey_kong)
+      assert_equal "Donkey Kong", game.name
+      assert_equal 123, game.points
+      assert_equal "1st", game.placement
+      assert_equal Game, game.class
+    end
+
+    def test_create_model_object
+      game = create(:donkey_kong)
+      assert_equal "Donkey Kong", game.name
+      assert_equal 123, game.points
+      assert_equal "1st", game.placement
+      assert_equal Game, game.class
+      assert game.id
+    end
+
+    def test_non_activerecord_class
+      assert account(:account)
+      assert mock(:account)
     end
   end
 end

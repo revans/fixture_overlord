@@ -24,7 +24,13 @@ module FixtureOverlord
 
     # take the yaml file name and convert it to a model classname
     def to_model(file)
-      yaml_filename(file).to_s.classify
+      model = yaml_filename(file).to_s.classify.constantize
+      unless model.respond_to?(:create!)
+        model.send(:define_method, :create!) do
+          "This Class (#{self}) does not have a 'create!' method."
+        end
+      end
+      model
     end
 
     # check to see if the model is inherited from ActiveRecord

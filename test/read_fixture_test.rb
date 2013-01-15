@@ -6,9 +6,10 @@ module FixtureOverlord
   class ReadFixtureTest < MiniTest::Unit::TestCase
     def test_read_valid_yaml
       fixture   = ReadFixture.new("./test/fixtures/account.yml")
-      expected  = { account: { name: "Mandolin Bay", balance: 45843.00 } }
+      expected  = { name: "Mandolin Bay", balance: 45843.00 }
 
-      assert_equal expected, fixture.read
+      assert_equal expected, fixture.read(:account)
+      assert_equal OpenStruct, fixture.read(:account).mock.class
     end
 
     def test_read_valid_yaml_erb
@@ -22,5 +23,6 @@ module FixtureOverlord
         ReadFixture.new("./test/invalid.yml").read
       end
     end
+
   end
 end
