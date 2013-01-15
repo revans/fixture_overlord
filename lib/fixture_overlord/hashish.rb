@@ -1,11 +1,10 @@
 # -*- encoding: utf-8 -*-
 require 'ostruct'
+require_relative "interface"
 
 module FixtureOverlord
   class Hashish < Hash
-    def mock
-      ::OpenStruct.new(self)
-    end
+    include Interface
 
     def symbolize_keys(hash = self)
       results = case hash

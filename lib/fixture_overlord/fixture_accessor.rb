@@ -21,34 +21,10 @@ module FixtureOverlord
       FixtureHelper.yaml_files.each do |yaml|
 
         # creates the hash version of the model
-        define_method( FixtureHelper.yaml_filename(yaml) ) do |key|
-          FixtureHelper.read_fixture_file(yaml, key)
-        end
-
-        # FIXME: When using (mock, create, build) and specifying a key, there is
-        # no associated model/yml file to look in.
-        #
-        # New API: games(:donkey_kong), mock_game(:donkey_kong),
-        # create_game(:donkey_kong), build_game(:donkey_kong)
-        #
-        # creates an OpenStruct mock to be used as a stand-in for your Model
-        define_method(:mock) do |key|
+        define_method(FixtureHelper.yaml_filename(yaml)) do |key|
           hash = FixtureHelper.read_fixture_file(yaml, key)
-          FixtureHelper.create_mock(hash)
-        end
-
-        # persists the model object
-        define_method(:create) do |key|
-          hash = FixtureHelper.read_fixture_file(yaml, key)
-          model = FixtureHelper.to_model(yaml)
-          model.create!(hash)
-        end
-
-        # creates an unsaved version of your model object
-        define_method(:build) do |key|
-          hash = FixtureHelper.read_fixture_file(yaml, key)
-          model = FixtureHelper.to_model(yaml)
-          model.new(hash)
+          hash.yaml_filename = FixtureHelper.yaml_filename(yaml)
+          hash
         end
 
       end

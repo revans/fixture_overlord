@@ -5,17 +5,28 @@ require 'rails'
 # overried AR with a mock
 module ActiveRecord
   class Base < OpenStruct
-    def self.create!(hash)
-      obj = new(hash)
-      obj.id = 1
-      obj
+    class << self
+      def create!(hash)
+        obj = new(hash)
+        obj.id = 1
+        obj
+      end
+      alias :create :create!
+
+      def build(hash)
+        obj = new(hash)
+      end
     end
   end
 end
 
 # setup a mock model
 class Game < ActiveRecord::Base; end
-class Account < OpenStruct; end
+class Account < OpenStruct
+  def self.create(o)
+    "I exist!"
+  end
+end
 
 # redirect Rails.root to my test/fixture location here
 module Rails
@@ -39,11 +50,12 @@ module FixtureOverlord
 
     def test_hash
       game = games(:donkey_kong)
+      assert_equal "games", game.yaml_filename
       assert game
     end
 
     def test_mock_fixture
-      mock = mock(:donkey_kong)
+      mock = games(:donkey_kong).mock
       assert_equal "Donkey Kong", mock.name
       assert_equal 123, mock.points
       assert_equal "1st", mock.placement
@@ -51,7 +63,7 @@ module FixtureOverlord
     end
 
     def test_build_model_object
-      game = build(:donkey_kong)
+      game = games(:donkey_kong).build
       assert_equal "Donkey Kong", game.name
       assert_equal 123, game.points
       assert_equal "1st", game.placement
@@ -59,7 +71,16 @@ module FixtureOverlord
     end
 
     def test_create_model_object
-      game = create(:donkey_kong)
+      game = games(:donkey_kong).create
+      assert_equal "Donkey Kong", game.name
+      assert_equal 123, game.points
+      assert_equal "1st", game.placement
+      assert_equal Game, game.class
+      assert game.id
+    end
+
+    def test_create_bang_model_object
+      game = games(:donkey_kong).create!
       assert_equal "Donkey Kong", game.name
       assert_equal 123, game.points
       assert_equal "1st", game.placement
@@ -69,7 +90,14 @@ module FixtureOverlord
 
     def test_non_activerecord_class
       assert account(:account)
-      assert mock(:account)
+      assert_equal OpenStruct, account(:account).mock.class
+      assert_raises NoMethodError do
+        account(:account).build
+      end
+      assert_raises NoMethodError do
+        account(:account).create!
+      end
+      assert_equal "I exist!", account(:account).create
     end
   end
 end

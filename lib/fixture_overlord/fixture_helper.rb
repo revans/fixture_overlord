@@ -3,6 +3,7 @@ require 'ostruct'
 require 'securerandom'
 require_relative "read_fixture"
 
+# TODO: refactor to a class
 module FixtureOverlord
   module FixtureHelper
     extend self
@@ -19,17 +20,12 @@ module FixtureOverlord
 
     # reading the yaml filename
     def yaml_filename(file)
-      ::File.basename(file).split('.').first.to_sym
+      ::File.basename(file).split('.').first
     end
 
-    # take the yaml file name and convert it to a model classname
+    # take the yaml filename and convert it to a model classname
     def to_model(file)
       model = yaml_filename(file).to_s.classify.constantize
-      unless model.respond_to?(:create!)
-        model.send(:define_method, :create!) do
-          "This Class (#{self}) does not have a 'create!' method."
-        end
-      end
       model
     end
 
@@ -39,14 +35,8 @@ module FixtureOverlord
       model.respond_to?(:superclass) && model.superclass == ActiveRecord::Base
     end
 
-    # return an OpenStruct stand-in to act as a mock
-    def create_mock(hash)
-      ::OpenStruct.new(hash.merge(generate_id))
-    end
-
-    # generate a unique id and return the hash
-    def generate_id
-      { id: ::SecureRandom.random_number(99999) }
+    def respond_to_model_methods?(model)
+      model.respond_to?(:create!) || model.respond_to?(:create) || model.respond_to?(:build)
     end
 
   end
