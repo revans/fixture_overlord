@@ -17,7 +17,7 @@ class MiniTest::Unit::TestCase
   # include FixtureOverlord's Mixin
   include FixtureOverlord
 
-  # add the fixture accessor that will define 4 methods for each one
+  # add the fixture accessor that will define 1 method for each YAML file
   # of your YAML files within {spec,test}/fixtures.
   fixture_overloard :rule
 end
