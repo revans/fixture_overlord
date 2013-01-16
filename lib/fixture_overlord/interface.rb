@@ -15,7 +15,7 @@ module FixtureOverlord
 
     # initialize the model
     def build
-      build_model_base.build(self)
+      build_model_base.new(self)
     end
 
     # create in the database
