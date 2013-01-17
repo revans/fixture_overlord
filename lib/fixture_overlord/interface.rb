@@ -13,6 +13,24 @@ module FixtureOverlord
       ::OpenStruct.new(self.merge(generate_id))
     end
 
+    # returns the model constant so it can be used for associations:
+    # e.g.
+    #
+    #   @post.replies.new
+    #
+    #-Create stand ins
+    #
+    #   new_post  = posts(:new_post).build
+    #   reply     = replies(:reply_to_new_post).association
+    #
+    #-Mock
+    #
+    #   Post.stubs(:find).returns(new_post)
+    #   Post.any_instance.stubs(:replies).returns(reply)
+    def association
+      build_model_base
+    end
+
     # initialize the model
     def build
       build_model_base.build(self)

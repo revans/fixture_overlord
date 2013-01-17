@@ -79,6 +79,11 @@ module FixtureOverlord
       assert game.id
     end
 
+    def test_association_model_object
+      game = games(:donkey_kong).association
+      assert_equal Game, game
+    end
+
     def test_create_bang_model_object
       game = games(:donkey_kong).create!
       assert_equal "Donkey Kong", game.name
