@@ -12,10 +12,6 @@ module ActiveRecord
         obj
       end
       alias :create :create!
-
-      def build(hash)
-        obj = new(hash)
-      end
     end
   end
 end
@@ -95,10 +91,8 @@ module FixtureOverlord
 
     def test_non_activerecord_class
       assert account(:account)
+      assert account(:account).build
       assert_equal OpenStruct, account(:account).mock.class
-      assert_raises NoMethodError do
-        account(:account).build
-      end
       assert_raises NoMethodError do
         account(:account).create!
       end
