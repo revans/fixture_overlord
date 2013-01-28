@@ -14,6 +14,7 @@ module FixtureOverlord
     end
 
     # returns the model constant so it can be used for associations:
+    # TODO: Either make this more intuitive or provide better documentation.
     # e.g.
     #
     #   @post.replies.new
@@ -47,9 +48,15 @@ module FixtureOverlord
     end
 
     # change a key/value or add one
+    #
+    # e.g.
+    #   games(:donkey_kong).change(name: 'Jumpman Jr.').mock
+    #   games(:donkey_kong).add(leader: 'Jacob').mock
+    #
     def change(options = {})
       self.merge(options)
     end
+    alias :add :change
 
     # remove hash attributes via their key name
     # e.g.

@@ -98,5 +98,17 @@ module FixtureOverlord
       end
       assert_equal "I exist!", account(:account).create
     end
+
+    def test_changing_an_object
+      assert_equal "Jumpman Jr.", games(:donkey_kong).change(name: "Jumpman Jr.").mock.name
+      assert_equal "Jumpman Jr.", games(:donkey_kong).change(name: "Jumpman Jr.").build.name
+      assert_equal "Jumpman Jr.", games(:donkey_kong).change(name: "Jumpman Jr.").create.name
+    end
+
+    def test_adding_an_attribute_to_an_object
+      assert_equal "Jacob", games(:donkey_kong).add(leader: "Jacob").mock.leader
+      assert_equal "Jacob", games(:donkey_kong).add(leader: "Jacob").build.leader
+      assert_equal "Jacob", games(:donkey_kong).add(leader: "Jacob").create.leader
+    end
   end
 end
