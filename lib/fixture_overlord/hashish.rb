@@ -3,7 +3,7 @@ require 'ostruct'
 require_relative "interface"
 
 module FixtureOverlord
-  class Hashish < Hash
+  class Hashish < ::Hash
     include Interface
 
     def symbolize_keys(hash = self)

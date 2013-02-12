@@ -1,5 +1,6 @@
-require 'minitest/autorun'
 require "./lib/fixture_overlord/hashish"
+require 'minitest/autorun'
+require 'yaml'
 
 module FixtureOverlord
   class HashishTest < MiniTest::Unit::TestCase
@@ -33,6 +34,23 @@ module FixtureOverlord
 
       assert_equal expected, string_hash.symbolize_keys
       assert_equal OpenStruct, string_hash.symbolize_keys.mock.class
+    end
+
+    def test_symbolizing_key_loading_yml
+      account = "./test/fixtures/account.yml"
+
+      data = ::YAML.load(IO.read(account))
+      expected = {"account"=>{"name"=>"Mandolin Bay", "balance"=>45843.0}}
+      assert_equal expected, data
+
+      expected = {:account=>{:name=>"Mandolin Bay", :balance=>45843.0}}
+      assert_equal expected, Hashish[expected].symbolize_keys
+
+
+      fixture   = data["account"]
+      expected  = { name: "Mandolin Bay", balance: 45843.00 }
+      assert_equal expected, Hashish[expected].symbolize_keys
+
     end
   end
 end

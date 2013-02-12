@@ -8,14 +8,19 @@ module FixtureOverlord
       fixture   = ReadFixture.new("./test/fixtures/account.yml")
       expected  = { name: "Mandolin Bay", balance: 45843.00 }
 
-      assert_equal expected, fixture.read(:account)
-      assert_equal OpenStruct, fixture.read(:account).mock.class
+      account = fixture.read(:account)
+      assert_equal expected, account
+      assert_equal OpenStruct, account.mock.class
     end
 
     def test_read_valid_yaml_erb
       fixture   = ReadFixture.new("./test/fixtures/hotel.yml")
-      expected  = { hotel: { id: 10, name: "Mandolin Bay", location: "Vegas Strip",
-                             phone: "1-800-999-9999", open: true, date: Date.today } }
+      expected  = { id: 10, name: "Mandolin Bay", location: "Vegas Strip",
+                    phone: "1-800-999-9999", open: true, date: Date.today }
+
+      hotel = fixture.read(:hotel)
+      assert_equal expected,    hotel
+      assert_equal OpenStruct,  hotel.mock.class
     end
 
     def test_read_invalid_yaml
