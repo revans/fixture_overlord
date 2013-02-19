@@ -25,14 +25,12 @@ module FixtureOverlord
 
     # take the yaml filename and convert it to a model classname
     def to_model(file)
-      model = yaml_filename(file).to_s.classify.constantize
-      model
+      yaml_filename(file).to_s.classify.constantize
     end
 
     # check to see if the model is inherited from ActiveRecord
     def persisted_model?(file)
-      model = to_model(file)
-      model.respond_to?(:superclass) && model.superclass == ActiveRecord::Base
+      to_model(file).respond_to?(:superclass) && (model.superclass == ActiveRecord::Base)
     end
 
     def respond_to_model_methods?(model)

@@ -76,8 +76,12 @@ module FixtureOverlord
     end
 
     def test_association_model_object
-      game = games(:donkey_kong).association
-      assert_equal Game, game
+      account = account(:account).mock
+      game = games(:donkey_kong).associated_with(account).mock
+
+      assert_equal account.id, game.account_id
+      # game = games(:donkey_kong).association
+      # assert_equal Game, game
     end
 
     def test_create_bang_model_object

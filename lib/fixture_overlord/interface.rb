@@ -10,41 +10,46 @@ module FixtureOverlord
 
     # return an OpenStruct stand-in to act as a mock
     def mock
-      ::OpenStruct.new(self.merge(generate_id))
+      # ::OpenStruct.new(self.merge(generate_id))
+      self.merge!(generate_id)
+      Struct.new(model.name, *self.keys).new(*self.values)
     end
 
-    # returns the model constant so it can be used for associations:
-    # TODO: Either make this more intuitive or provide better documentation.
+    #-Define object associations
+    #
     # e.g.
-    #
-    #   @post.replies.new
-    #
-    #-Create stand ins
-    #
     #   new_post  = posts(:new_post).build
-    #   reply     = replies(:reply_to_new_post).association
+    #   reply     = replies(:reply_to_new_post).associated_with(new_post).build
     #
-    #-Mock
-    #
-    #   Post.stubs(:find).returns(new_post)
-    #   Post.any_instance.stubs(:replies).returns(reply)
-    def association
-      build_model_base
+    def associated_with(object)
+      model_base = model.new(self)
+      case base.class
+      when Hash, Hashish
+        model_base.merge!(to_association(object))
+      when OpenStruct
+        model_base.send("#{underscore_class_name(object)}_id".to_sym, object.id)
+        model_base.send(underscore_class_name(object), object)
+
+      # assume model object, subclass of active record
+      else
+        model_base.send("#{underscore_class_name(object)}_id".to_sym, object.id)
+      end
+      base
     end
 
     # initialize the model
     def build
-      build_model_base.new(self)
+      model.new(self)
     end
 
     # create in the database
     def create
-      build_model_base.create(self)
+      model.create(self)
     end
 
     # create in the database
     def create!
-      build_model_base.create!(self)
+      model.create!(self)
     end
 
     # change a key/value or add one
@@ -66,14 +71,28 @@ module FixtureOverlord
       self.delete_if { |k,_| keys.include?(k) }
     end
 
+    private
+
     # generate a unique id and return the hash
     def generate_id
       { id: ::SecureRandom.random_number(99999) }
     end
 
     # returns the model constant
-    def build_model_base
-      @build_model_base ||= FixtureHelper.to_model(yaml_filename)
+    def model
+      @model ||= FixtureHelper.to_model(yaml_filename)
+    end
+
+    def to_association(obj)
+      {"#{underscore_class_name(obj)}_id" => obj.id}
+    end
+
+    def underscore_class_name(obj)
+      class_name(obj).name.underscore
+    end
+
+    def class_name(obj)
+      obj.class
     end
 
   end
