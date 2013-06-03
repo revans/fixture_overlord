@@ -22,7 +22,7 @@ module FixtureOverlord
     #   blog.to_attributes => { title: 'Blog' }
     #
     def to_attributes
-      Hashish[self.to_h]
+      Hashish[self.to_h].symbolize_keys
     end
 
 
