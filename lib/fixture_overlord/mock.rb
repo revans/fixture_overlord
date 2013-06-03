@@ -1,6 +1,7 @@
 require 'ostruct'
 require 'securerandom'
 require_relative 'helpers'
+require_relative 'hashish'
 
 module FixtureOverlord
   class Mock < OpenStruct
@@ -11,6 +12,17 @@ module FixtureOverlord
 
     def initialize(hash)
       super(hash.merge(generate_id))
+    end
+
+    # Converts attributes back to a hash (Hashish).
+    # Beacuse this is still a Hashish Hash, we can covert
+    # it back to a mock.
+    #
+    # e.g.
+    #   blog.to_attributes => { title: 'Blog' }
+    #
+    def to_attributes
+      Hashish[self.to_h]
     end
 
 
@@ -44,6 +56,12 @@ module FixtureOverlord
     alias :add :change
 
 
+    # remove an attribute from the class
+    #
+    # e.g.
+    #   blog.remove(:name)
+    #   blog.name == nil
+    #
     def remove(key)
       writer(key)
     end

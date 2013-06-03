@@ -16,6 +16,11 @@ module FixtureOverlord
       assert              mock.id
     end
 
+    def test_to_attributes
+      actual = mock.to_attributes
+      assert_instance_of Hashish, actual
+    end
+
     def test_change
       mock.change(name: 'Robert')
       assert_equal "Robert", mock.name
