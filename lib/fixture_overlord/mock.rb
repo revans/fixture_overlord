@@ -26,21 +26,46 @@ module FixtureOverlord
     end
 
 
-    # add an association
+    # add a child association
     #
     # e.g. (has_many)
     #
-    #   blog.association(posts: post)
+    #   blog.child(posts: post)
     #   blog.posts.first.title
     #
-    #   (belongs_to)
+    # There are 4 methods aliased to this one to provide
+    # the developer ActiveRecord & a Sequel (ORM) like
+    # interface.
     #
-    #   post.association(blog: blog)
+    def child(options)
+      associations(options) do |k,v|
+        writer(k,[v])
+      end
+    end
+    alias :has_many     :child
+    alias :one_to_many  :child
+
+
+    # add a parent association
+    #
+    # e.g. (belongs_to)
+    #
+    #   post.parent(blog: blog)
     #   post.blog.name
     #
-    def association(options)
-      options.each { |k,v| writer(k,[v]) }
+    # There are 4 methods aliased to this one to provide
+    # the developer ActiveRecord & a Sequel (ORM) like
+    # interface.
+    #
+    def parent(options)
+      associations(options) do |k,v|
+        writer(k,v)
+      end
     end
+    alias :belongs_to   :parent
+    alias :many_to_one  :parent
+    alias :has_one      :parent
+    alias :one_to_one   :parent
 
 
     # change a key/value or add one
@@ -81,6 +106,13 @@ module FixtureOverlord
 
     def build_model_base
       @build_model_base ||= Helpers.to_model(yaml_filename)
+    end
+
+    def associations(options, &block)
+      options.each do |k,v|
+        v = Mock.setup(v) if v.is_a?(Hash) || v.is_a?(Hashish)
+        yield k, v
+      end
     end
 
   end

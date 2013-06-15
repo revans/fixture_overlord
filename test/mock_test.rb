@@ -2,7 +2,7 @@ require 'test_helper'
 require_relative '../lib/fixture_overlord/mock'
 
 module FixtureOverlord
-  class MockTest < MiniTest::Unit::TestCase
+  class MockTest < Minitest::Test
     def mock
       @mock ||= begin
         hash = { name: "Bob", age: 49 }
@@ -44,14 +44,22 @@ module FixtureOverlord
       assert_nil mock.city
     end
 
-    def test_association
+    def test_child
       post = Mock.setup(title: "Demo", content: "some content")
       blog = Mock.setup(name: "My Blog")
 
-      blog.association(posts: post)
+      blog.child(posts: post)
 
       assert_instance_of Array, blog.posts
       assert_equal "Demo", blog.posts.first.title
+    end
+
+    def test_parent
+      post = Mock.setup(title: "Demo", content: "some content")
+      blog = Mock.setup(name: "My Blog")
+
+      post.parent(blog: blog)
+      assert_equal "My Blog", post.blog.name
     end
   end
 end

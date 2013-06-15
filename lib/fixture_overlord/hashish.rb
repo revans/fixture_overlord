@@ -1,4 +1,5 @@
 require 'ostruct'
+require_relative 'mock'
 
 module FixtureOverlord
   class Hashish < ::Hash
@@ -45,7 +46,7 @@ module FixtureOverlord
         else
           value
         end
-        result[key.to_sym] = nval
+        result[key.downcase.to_sym] = nval
         result
       end
     end
