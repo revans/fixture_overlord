@@ -1,4 +1,6 @@
 require_relative 'hashish'
+require 'yaml'
+require 'erb'
 
 module FixtureOverlord
   FormattingError = Class.new(StandardError)
@@ -28,7 +30,7 @@ module FixtureOverlord
       begin
         data = ::YAML.load(render)
       rescue ::ArgumentError, ::Psych::SyntaxError => error
-        raise FormattingError, "a YAML error ocurred parsing #{file}.\nThe error was:\n #{error.class}: #{error}", error.backtrace
+        raise FormattingError, "a YAML error ocurred parsing #{@file}.\nThe error was:\n #{error.class}: #{error}", error.backtrace
       end
       validate(data)
     end
