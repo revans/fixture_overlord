@@ -1,10 +1,28 @@
-# -*- encoding: utf-8 -*-
 require 'ostruct'
-require_relative "interface"
+require_relative 'mock'
 
+# Hashish
+#
+# === About
+#
+# Hashish is an over-glorified Hash with a few extra special methods to make it easier
+# to work with within FixtureOverlord. Things like +symbolize_keys+, which does a deep
+# symbolization on all keys within the given hash help create a predictable hash to work
+# with.
+#
+# TODO: #yaml_file - check to see where this is being used. Potentially a relic from before
+#       the rewrite.
+#
 module FixtureOverlord
   class Hashish < ::Hash
-    include Interface
+
+    def yaml_file=(name)
+      @yaml_file = name
+    end
+
+    def mock
+      Mock.setup(self)
+    end
 
     def symbolize_keys(hash = self)
       results = case hash
@@ -40,7 +58,7 @@ module FixtureOverlord
         else
           value
         end
-        result[key.to_sym] = nval
+        result[key.downcase.to_sym] = nval
         result
       end
     end

@@ -1,4 +1,3 @@
-source 'https://rubygems.org'
-
-# Specify your gem's dependencies in fixture_overlord.gemspec
+source "https://rubygems.org"
+ruby "2.0.0"
 gemspec
