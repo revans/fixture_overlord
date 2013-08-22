@@ -19,9 +19,12 @@ module FixtureOverlord
     end
 
     # check to see if the model is inherited from ActiveRecord
+    #
+    # TODO: Add more than just ActiveRecord, specifically Sequel
+    #
     def persisted_model?(file)
       model = to_model(file)
-      model.respond_to?(:superclass) && model.superclass == ActiveRecord::Base
+      model.respond_to?(:superclass) && model.superclass == ::ActiveRecord::Base
     end
 
     def respond_to_model_methods?(model)

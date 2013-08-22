@@ -1,6 +1,18 @@
 require 'ostruct'
 require_relative 'mock'
 
+# Hashish
+#
+# === About
+#
+# Hashish is an over-glorified Hash with a few extra special methods to make it easier
+# to work with within FixtureOverlord. Things like +symbolize_keys+, which does a deep
+# symbolization on all keys within the given hash help create a predictable hash to work
+# with.
+#
+# TODO: #yaml_file - check to see where this is being used. Potentially a relic from before
+#       the rewrite.
+#
 module FixtureOverlord
   class Hashish < ::Hash
 

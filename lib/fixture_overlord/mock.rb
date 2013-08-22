@@ -18,6 +18,8 @@ module FixtureOverlord
     # Beacuse this is still a Hashish Hash, we can covert
     # it back to a mock.
     #
+    # ==== Examples
+    #
     # e.g.
     #   blog.to_attributes => { title: 'Blog' }
     #
@@ -27,6 +29,8 @@ module FixtureOverlord
 
 
     # add a child association
+    #
+    # ==== Examples
     #
     # e.g. (has_many)
     #
@@ -47,6 +51,8 @@ module FixtureOverlord
 
 
     # add a parent association
+    #
+    # ==== Examples
     #
     # e.g. (belongs_to)
     #
@@ -70,6 +76,8 @@ module FixtureOverlord
 
     # change a key/value or add one
     #
+    # ==== Examples
+    #
     # e.g.
     #   games(:donkey_kong).change(name: 'Jumpman Jr.').mock
     #   games(:donkey_kong).add(leader: 'Jacob').mock
@@ -82,6 +90,8 @@ module FixtureOverlord
 
 
     # remove an attribute from the class
+    #
+    # ==== Examples
     #
     # e.g.
     #   blog.remove(:name)
@@ -96,10 +106,13 @@ module FixtureOverlord
     private
 
     # generate a unique id and return the hash
+    #
     def generate_id
       { id: ::SecureRandom.random_number(99999) }
     end
 
+    # assign a value to a hash key
+    #
     def writer(key, value = nil)
       self.send("#{key}=", value)
     end

@@ -26,6 +26,7 @@ module FixtureOverlord
     #         ActiveRecord FixtureSet::File
     #
     # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/fixture_set/file.rb
+    #
     def read_file
       begin
         data = ::YAML.load(render)
