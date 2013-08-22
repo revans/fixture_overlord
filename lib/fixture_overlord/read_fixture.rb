@@ -1,14 +1,15 @@
-# -*- encoding: utf-8 -*-
+require_relative 'hashish'
 require 'yaml'
 require 'erb'
-
-require_relative "hashish"
 
 module FixtureOverlord
   FormattingError = Class.new(StandardError)
 
+  def self.read_fixture(yaml_file, key)
+    ReadFixture.new(yaml_file).read(key)
+  end
+
   class ReadFixture
-    attr_reader :file
     def initialize(file)
       @file = file
     end
@@ -25,26 +26,37 @@ module FixtureOverlord
     #         ActiveRecord FixtureSet::File
     #
     # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/fixture_set/file.rb
+    #
     def read_file
       begin
-        data = ::YAML.load(render(IO.read(file)))
+        data = ::YAML.load(render)
       rescue ::ArgumentError, ::Psych::SyntaxError => error
-        raise FormattingError, "a YAML error ocurred parsing #{file}.\nThe error was:\n #{error.class}: #{error}", error.backtrace
+        raise FormattingError, "a YAML error ocurred parsing #{@file}.\nThe error was:\n #{error.class}: #{error}", error.backtrace
       end
       validate(data)
     end
 
     def validate(data)
-      unless Hash === data || ::YAML::Omap === data
+      unless valid_data?(data)
         raise FormattingError, "fixture is not a Hash or YAML::Omap."
       end
 
-      raise FormattingError unless data.all? { |name, row| Hash === row }
+      raise FormattingError unless data.all? { |name, row| ::Hash === row }
       data
     end
 
-    def render(content)
+    def render
+      erb_render(
+        IO.read(@file)
+      )
+    end
+
+    def erb_render(content)
       ::ERB.new(content).result
+    end
+
+    def valid_data?(data)
+      ::Hash === data || ::YAML::Omap === data
     end
   end
 end

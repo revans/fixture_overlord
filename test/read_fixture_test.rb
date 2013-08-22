@@ -1,33 +1,41 @@
-require 'minitest/autorun'
-require "./lib/fixture_overlord/read_fixture"
-require "date"
+require 'test_helper'
+require './lib/fixture_overlord/read_fixture'
 
 module FixtureOverlord
-  class ReadFixtureTest < MiniTest::Unit::TestCase
-    def test_read_valid_yaml
-      fixture   = ReadFixture.new("./test/fixtures/account.yml")
-      expected  = { name: "Mandolin Bay", balance: 45843.00 }
-
-      account = fixture.read(:account)
-      assert_equal expected, account
-      assert_equal OpenStruct, account.mock.class
+  class ReadFixtureTest < Minitest::Test
+    def fixture(name)
+      ReadFixture.new("./test/fixtures/#{name}")
     end
 
-    def test_read_valid_yaml_erb
-      fixture   = ReadFixture.new("./test/fixtures/hotel.yml")
-      expected  = { id: 10, name: "Mandolin Bay", location: "Vegas Strip",
-                    phone: "1-800-999-9999", open: true, date: Date.today }
+    def valid_fixture
+      @valid_fixture ||= fixture("person.yaml").read(:bob)
+    end
 
-      hotel = fixture.read(:hotel)
-      assert_equal expected,    hotel
-      assert_equal OpenStruct,  hotel.mock.class
+    def invalid_fixture
+      @invalid_fixture ||= fixture("error.yaml").read(:error)
+    end
+
+    def test_read_valid_yaml
+      expected = {:name=>"Bob", :age=>44}
+      assert_equal expected, valid_fixture
     end
 
     def test_read_invalid_yaml
       assert_raises FormattingError do
-        ReadFixture.new("./test/invalid.yml").read
+        invalid_fixture
       end
     end
 
+    def test_read_valid_yaml_with_erb
+      hotel = fixture("hotel.yml").read(:hotel)
+
+      assert hotel
+      assert_equal 10, hotel[:id]
+      assert_equal "Mandolin Bay", hotel[:name]
+      assert_equal "Vegas Strip", hotel[:location]
+      assert_equal "1-800-999-9999", hotel[:phone]
+      assert hotel[:open]
+      assert_equal Date.today, hotel[:date]
+    end
   end
 end

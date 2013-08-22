@@ -1,7 +1,7 @@
 
 module FixtureOverlord
-  module Interfaces
-    class Mock
+  class ObjectCoercion
+    def initialize
     end
   end
 end
