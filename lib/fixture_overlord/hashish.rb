@@ -1,5 +1,7 @@
 require 'ostruct'
 require_relative 'mock'
+require_relative 'model'
+require_relative 'helpers'
 
 # Hashish
 #
@@ -15,13 +17,23 @@ require_relative 'mock'
 #
 module FixtureOverlord
   class Hashish < ::Hash
-
-    def yaml_file=(name)
-      @yaml_file = name
-    end
+    attr_accessor :yaml_file
 
     def mock
       Mock.setup(self)
+    end
+
+    def model
+      Model.init(self, yaml_file)
+    end
+
+    def create
+      Model.create(self, yaml_file)
+    end
+    alias :create! :create
+
+    def build
+      Model.init(self, yaml_file)
     end
 
     def symbolize_keys(hash = self)
