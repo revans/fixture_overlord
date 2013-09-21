@@ -9,9 +9,11 @@ end
 
 class Person < ActiveRecord::Base
   def initialize(attributes={});  end
-  def create;   true; end
-  def create!;  true; end
-  def build;    true; end
+  class << self
+    def create(*args);    true; end
+    def create!(*args);   true; end
+    def build(*args);     true; end
+  end
 end
 
 class Minitest::Test
