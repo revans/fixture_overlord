@@ -12,9 +12,6 @@ require_relative 'helpers'
 # symbolization on all keys within the given hash help create a predictable hash to work
 # with.
 #
-# TODO: #yaml_file - check to see where this is being used. Potentially a relic from before
-#       the rewrite.
-#
 module FixtureOverlord
   class Hashish < ::Hash
     attr_accessor :yaml_file

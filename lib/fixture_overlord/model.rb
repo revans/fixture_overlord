@@ -1,16 +1,17 @@
 module FixtureOverlord
   class Model
 
-    def self.create(hash, filename)
-      new(hash, filename).convert_to_model.create!
-    end
     class << self
+      def init(hash, filename)
+        new(hash, filename).convert_to_model
+      end
+
+      def create(hash, filename)
+        init(hash, filename).create
+      end
       alias_method :create!, :create
     end
 
-    def self.init(hash, filename)
-      new(hash, filename).convert_to_model
-    end
 
     def initialize(hash, filename)
       @hash, @filename = hash, filename
@@ -33,7 +34,7 @@ module FixtureOverlord
 
     def respond_to_model_methods?
       model = convert_to_model
-      model.respond_to?(:create!) ||
+      # model.respond_to?(:create!) ||
         model.respond_to?(:create) ||
         model.respond_to?(:build)
     end
