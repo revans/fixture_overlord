@@ -1,5 +1,3 @@
-require "./lib/fixture_overlord/string_extension"
-
 module FixtureOverlord
   class Model
 
