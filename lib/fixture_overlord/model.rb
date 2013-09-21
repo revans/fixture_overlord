@@ -18,7 +18,9 @@ module FixtureOverlord
     end
 
     def convert_to_model
-      model_name.new(@hash)
+      model_name.new(
+        @hash.delete_if { |key,value| key.to_sym == :id }
+      )
     end
 
     def model_name
@@ -34,7 +36,7 @@ module FixtureOverlord
 
     def respond_to_model_methods?
       model = convert_to_model
-      # model.respond_to?(:create!) ||
+      model.respond_to?(:create!) ||
         model.respond_to?(:create) ||
         model.respond_to?(:build)
     end
