@@ -11,6 +11,12 @@ class Person < ActiveRecord::Base
   def create;   true; end
   def create!;  true; end
   def build;    true; end
+
+  class << self
+    def create(hash = {});   true; end
+    def create!(hash = {});  true; end
+    def build(hash = {});    true; end
+  end
 end
 
 module FixtureOverlord
@@ -53,6 +59,14 @@ module FixtureOverlord
       assert model.create
       assert model.create!
       assert model.build
+    end
+
+    def test_plural_filename
+      model = Model.init(hashish, 'people')
+      assert_equal Person, model.class
+      assert model.respond_to?(:create)
+      assert model.respond_to?(:build)
+      assert_equal ::ActiveRecord::Base, model.class.superclass
     end
   end
 end

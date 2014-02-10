@@ -1,3 +1,5 @@
+require 'active_support/core_ext/string/inflections.rb'
+
 module FixtureOverlord
   class Model
 
@@ -29,7 +31,7 @@ module FixtureOverlord
     end
 
     def model_name
-      @filename.to_s.classify.constantize
+      @model_name ||= @filename.to_s.singularize.classify.constantize
     end
 
     def can_convert_to_model?

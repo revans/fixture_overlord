@@ -3,7 +3,7 @@ require 'yaml'
 require 'securerandom'
 require 'erb'
 
-require_relative "fixture_overlord/string_extension"
+require_relative "fixture_overlord/string_extension" unless defined?(ActiveSupport::Inflector)
 require_relative 'fixture_overlord/fixture_accessor'
 
 module FixtureOverlord
