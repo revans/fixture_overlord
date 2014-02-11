@@ -6,5 +6,5 @@ module FixtureOverlord
 
   MAJOR = 0
   MINOR = 1
-  PATCH = 8
+  PATCH = 9
 end

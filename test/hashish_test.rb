@@ -57,5 +57,12 @@ module FixtureOverlord
       assert bob.build
     end
 
+    def test_associate
+      bob.associate(account_id: 1)
+      mock = bob.mock
+
+      assert_equal 1, mock.account_id
+    end
+
   end
 end

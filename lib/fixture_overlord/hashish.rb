@@ -33,6 +33,11 @@ module FixtureOverlord
       Model.init(self, yaml_file)
     end
 
+    def associate(hash)
+      self.merge!(hash)
+      self
+    end
+
     def symbolize_keys(hash = self)
       results = case hash
       when Array
