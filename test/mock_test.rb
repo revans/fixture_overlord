@@ -31,6 +31,11 @@ module FixtureOverlord
       assert_equal "123 Street", mock.address
     end
 
+    def test_merge
+      mock.merge(address: '123 Street')
+      assert_equal "123 Street", mock.address
+    end
+
     def test_remove
       mock.add(address: '123 Street')
       mock.add(city: 'Carlsbad')

@@ -87,6 +87,7 @@ module FixtureOverlord
       self
     end
     alias :add :change
+    alias :merge :change
 
 
     # remove an attribute from the class

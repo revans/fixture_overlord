@@ -32,6 +32,11 @@ module FixtureOverlord
       @bob ||= person(:bob)
     end
 
+    def test_merge
+      bob_extended = bob.merge(occupation: 'Secret Agent').mock
+      assert_equal 'Secret Agent', bob_extended.occupation
+    end
+
     def test_mock
       mock = bob.mock
       assert_equal "Bob", mock.name
