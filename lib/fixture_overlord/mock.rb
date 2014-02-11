@@ -37,7 +37,7 @@ module FixtureOverlord
     #   blog.child(posts: post)
     #   blog.posts.first.title
     #
-    # There are 4 methods aliased to this one to provide
+    # There are 2 methods aliased to this one to provide
     # the developer ActiveRecord & a Sequel (ORM) like
     # interface.
     #
@@ -79,8 +79,10 @@ module FixtureOverlord
     # ==== Examples
     #
     # e.g.
-    #   games(:donkey_kong).change(name: 'Jumpman Jr.').mock
-    #   games(:donkey_kong).add(leader: 'Jacob').mock
+    #   games(:donkey_kong).mock.change(name: 'Jumpman Jr.')
+    #   games(:donkey_kong).mock.add(leader: 'Jacob')
+    #   games(:donkey_kong).mock.merge(leader: 'Jacob')
+    #   games(:donkey_kong).mock.update(leader: 'Jacob')
     #
     def change(options = {})
       options.each { |k,v| writer(k,v) }
@@ -88,6 +90,7 @@ module FixtureOverlord
     end
     alias :add :change
     alias :merge :change
+    alias :update :change
 
 
     # remove an attribute from the class

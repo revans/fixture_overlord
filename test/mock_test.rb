@@ -23,17 +23,30 @@ module FixtureOverlord
 
     def test_change
       mock.change(name: 'Robert')
+
       assert_equal "Robert", mock.name
+      assert_equal "Robert", mock.to_attributes[:name]
     end
 
     def test_add
       mock.add(address: '123 Street')
+
       assert_equal "123 Street", mock.address
+      assert_equal "123 Street", mock.to_attributes[:address]
     end
 
     def test_merge
       mock.merge(address: '123 Street')
+
       assert_equal "123 Street", mock.address
+      assert_equal "123 Street", mock.to_attributes[:address]
+    end
+
+    def test_update
+      mock.update(address: '123 Street')
+
+      assert_equal "123 Street", mock.address
+      assert_equal "123 Street", mock.to_attributes[:address]
     end
 
     def test_remove
