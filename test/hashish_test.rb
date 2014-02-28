@@ -37,6 +37,34 @@ module FixtureOverlord
       assert_equal 'Secret Agent', bob_extended.occupation
     end
 
+    def test_remove
+      assert bob.key?(:age)
+      bob.remove(:age)
+
+      refute bob.key?(:age)
+    end
+
+    def test_add
+      bob.add(gender: 'male')
+
+      assert bob.key?(:gender)
+      assert_equal 'male', bob[:gender]
+    end
+
+    def test_change
+      bob.add(phone: '987-9876')
+
+      assert bob.key?(:phone)
+      assert_equal '987-9876', bob[:phone]
+    end
+
+    def test_update
+      bob.add(favorites: 'fish & chips')
+
+      assert bob.key?(:favorites)
+      assert_equal 'fish & chips', bob[:favorites]
+    end
+
     def test_mock
       mock = bob.mock
       assert_equal "Bob", mock.name

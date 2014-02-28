@@ -38,6 +38,18 @@ module FixtureOverlord
       self
     end
 
+    def remove(key)
+      self.delete_if { |k,_| k.to_s == key.to_s }
+    end
+
+    def add(options = {})
+      self.merge!(options)
+      self
+    end
+    alias :update :add
+    alias :change :add
+
+
     def symbolize_keys(hash = self)
       results = case hash
       when Array
