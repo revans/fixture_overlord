@@ -41,6 +41,8 @@ module FixtureOverlord
     def remove(key)
       self.delete_if { |k,_| k.to_s == key.to_s }
     end
+    alias :delete :remove
+    
 
     def add(options = {})
       self.merge!(options)
