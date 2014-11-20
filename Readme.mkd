@@ -1,3 +1,9 @@
+# Warning!!
+
+**Deprecated**
+
+Going to provide a rails-esque fixture-mock library
+
 # FixtureOverlord
 
 * This is an Alpha version and is currently under heavy development.
